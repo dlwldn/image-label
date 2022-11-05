@@ -1,8 +1,12 @@
 import React, { useEffect, useRef, useState, MouseEvent } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import tools from "../../lib/consts/tools";
+import { toolState } from "../../lib/store/tools";
 import colors from "../../styles/colors";
 
 const PaintBrush = () => {
+  const [tool, setTool] = useRecoilState(toolState);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
   const [isDraw, setIsDraw] = useState(false);
@@ -15,7 +19,7 @@ const PaintBrush = () => {
   }, []);
 
   const drawStart = (e: MouseEvent<HTMLCanvasElement>) => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || tool !== tools.SQUARE) return;
     setIsDraw(true);
     setPos([
       e.clientX - canvasRef.current.getBoundingClientRect().left,
@@ -24,12 +28,13 @@ const PaintBrush = () => {
   };
 
   const drawSquare = (e: MouseEvent<HTMLCanvasElement>) => {
-    if (!isDraw || !ctx || !canvasRef.current) return;
-    let currentX =
+    console.log(e);
+    if (!isDraw || !ctx || !canvasRef.current || tool !== tools.SQUARE) return;
+    const currentX =
       e.clientX -
       canvasRef.current.offsetLeft -
       canvasRef.current.getBoundingClientRect().left;
-    let currentY =
+    const currentY =
       e.clientY -
       canvasRef.current.offsetTop -
       canvasRef.current.getBoundingClientRect().top;
@@ -43,6 +48,7 @@ const PaintBrush = () => {
   };
 
   const drawEnd = () => {
+    if(tool !== tools.SQUARE) return;
     setIsDraw(false);
   };
 

@@ -41,7 +41,6 @@ const BoardWrapper = styled.div<{ currentTool: ToolStateType }>`
 const ImageWrapper = styled.div`
   position: relative;
 `;
-
 const Image = styled.div<{ imageUrl: string }>`
   background-image: url(${({ imageUrl }) => imageUrl});
   background-repeat: no-repeat;
